@@ -1,5 +1,5 @@
 
-CC=c++
+CC=g++
 CFLAGS=-c 
 LFLAGS=-framework SDL2 -framework SDL2_image
 FLAGS= $(CFLAGS) $(LFLAGS)
