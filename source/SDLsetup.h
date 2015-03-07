@@ -1,9 +1,7 @@
 //
 //  SDLsetup.h
-//  doomLike
 //
 //  Created by Thomas Joseph Hope on 09/09/2014.
-//  Copyright (c) 2014 Thomas Joseph Hope. All rights reserved.
 //
 
 #ifndef doomLike_SDLsetup_h
