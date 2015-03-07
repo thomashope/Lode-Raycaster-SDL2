@@ -65,9 +65,12 @@ void redraw();
 void cls();
 void print(float num);
 void verLine(int x, int start, int end, ColorRGB color);
+unsigned long getTicks();
+
+const Uint8* keystate;
 void readKeys();
 bool keyDown(int key);
-unsigned long getTicks();
+
 
 int worldMap[mapWidth][mapHeight]=
 {
@@ -333,10 +336,14 @@ unsigned long getTicks()
 
 void readKeys()
 {
-
+	keystate = SDL_GetKeyboardState(NULL);
 }
 
 bool keyDown(int key)
 {
+	if (key == SDLK_UP) return keystate[SDL_SCANCODE_UP];
+	if (key == SDLK_DOWN) return keystate[SDL_SCANCODE_DOWN];
+	if (key == SDLK_LEFT) return keystate[SDL_SCANCODE_LEFT];
+	if (key == SDLK_RIGHT) return keystate[SDL_SCANCODE_RIGHT];
 	return false;
 }
