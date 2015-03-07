@@ -15,10 +15,10 @@ build: main.o
 
 # link objects
 link:
-	$(CC) $(OBJECTS) $(LFLAGS) -o rayCaster.o
+	$(CC) $(OBJECTS) $(LFLAGS) -o rayCaster.out
 
 clean: 
-	rm -rf *.o
+	rm -rf *.o *.out
 
 # compile individual files
 main.o: $(SRC)main.cpp

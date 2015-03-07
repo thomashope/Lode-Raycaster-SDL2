@@ -32,6 +32,43 @@
 #define mapWidth 24
 #define mapHeight 24
 
+// replacements for quickcg functionality
+
+int w = SCREEN_WIDTH;
+int h = SCREEN_HEIGHT;
+
+struct ColorRGB
+{
+	int r;
+	int g;
+	int b;
+};
+
+ColorRGB operator/(const ColorRGB& color, int a)
+{
+  if(a == 0) return color;
+  ColorRGB c;
+  c.r = color.r / a;
+  c.g = color.g / a;
+  c.b = color.b / a;
+  return c;
+}
+
+ColorRGB RGB_Red    = {255,  0,  0};
+ColorRGB RGB_Green  = {  0,255,  0};
+ColorRGB RGB_Blue   = {  0,  0,255};
+ColorRGB RGB_White  = {255,255,255};
+ColorRGB RGB_Yellow = {255,255,  0};
+
+bool done();
+void redraw();
+void cls();
+void print(float num);
+void verLine(int x, int start, int end, ColorRGB color);
+void readKeys();
+bool keyDown(int key);
+unsigned long getTicks();
+
 int worldMap[mapWidth][mapHeight]=
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -60,9 +97,6 @@ int worldMap[mapWidth][mapHeight]=
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-bool done = false;
-SDL_Event event;
-
 int main()
 {
 
@@ -75,18 +109,13 @@ int main()
 
 	initEverything();
 
-	while (!done) // START OF GAME LOOP
+	while (!done()) // START OF GAME LOOP
 	{
-		// poll the event queue
-		while (SDL_PollEvent(&event))
-		{ 
-            if (event.type == SDL_QUIT) { done = true; }
-        }
 
-        for(int x = 0; x < SCREEN_WIDTH; x++)
+        for(int x = 0; x < w; x++)
 	    {
 			//calculate ray position and direction 
-			double cameraX = 2 * x / double(SCREEN_WIDTH) - 1; //x-coordinate in camera space
+			double cameraX = 2 * x / double(w) - 1; //x-coordinate in camera space
 			double rayPosX = posX;
 			double rayPosY = posY;
 			double rayDirX = dirX + planeX * cameraX;
@@ -183,13 +212,13 @@ int main()
 			perpWallDist = fabs((mapY - rayPosY + (1 - stepY) / 2) / rayDirY);
 
 			//Calculate height of line to draw on screen
-			int lineHeight = abs(int(SCREEN_HEIGHT / perpWallDist));
+			int lineHeight = abs(int(h / perpWallDist));
 
 			//calculate lowest and highest pixel to fill in current stripe
-			int drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
+			int drawStart = -lineHeight / 2 + h / 2;
 			if (drawStart < 0) drawStart = 0;
-			int drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
-			if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
+			int drawEnd = lineHeight / 2 + h / 2;
+			if (drawEnd >= h) drawEnd = h - 1;
 
 			//choose wall color
 			ColorRGB color;
@@ -259,4 +288,55 @@ int main()
 	}
 
 	return 0;
+}
+
+bool done()
+{
+	static SDL_Event event;
+
+	// poll the event queue
+	while (SDL_PollEvent(&event))
+	{
+		if (event.type == SDL_QUIT) { return true; }
+	}
+	return false;
+}
+
+void print(float num)
+{
+	std::cout << num << std::endl;
+}
+
+void redraw()
+{
+	SDL_RenderPresent(ren);
+}
+
+void cls()
+{
+	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+       SDL_RenderClear(ren);
+}
+
+void verLine(int x, int start, int end, ColorRGB color)
+{
+	// renderer, red, green, blue, alpha
+	SDL_SetRenderDrawColor(ren, color.r, color.g, color.b, 255);
+
+	SDL_RenderDrawLine(ren, x, start, x, end);
+}
+
+unsigned long getTicks()
+{
+	return SDL_GetTicks();
+}
+
+void readKeys()
+{
+
+}
+
+bool keyDown(int key)
+{
+	return false;
 }
