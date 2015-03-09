@@ -30,7 +30,6 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int
 
 bool initEverything();
 bool initSDL();
-bool initSDL_image();
 bool createWindow();
 bool createRenderer();
 void setupRenderer();
@@ -38,8 +37,6 @@ void setupRenderer();
 bool initEverything() {
     
     if ( !initSDL() ) { return false; }
-    
-    if ( !initSDL_image() ) { return false; }
     
     if ( !createWindow() ) { return false; }
     
@@ -53,15 +50,6 @@ bool initEverything() {
 bool initSDL() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         logSDLError(std::cout, "SDL_Init");
-        return false;
-    }
-    return true;
-}
-
-bool initSDL_image() {
-    //inialise the PNG component of SDL_image
-    if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG){
-        logSDLError(std::cout, "IMG_Init");
         return false;
     }
     return true;
@@ -95,14 +83,6 @@ void setupRenderer() {
 
 void logSDLError(std::ostream &os, const std::string &msg) {
     os << msg << " error: " << SDL_GetError() << std::endl;
-}
-
-SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren) {
-    SDL_Texture* texture = IMG_LoadTexture(ren, file.c_str());
-    if (texture == nullptr) {
-        logSDLError(std::cout, "loadTexture");
-    }
-    return texture;
 }
 
 void renderTexture(SDL_Texture* tex, SDL_Renderer* ren, int x, int y, int w, int h) {

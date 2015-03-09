@@ -4,14 +4,14 @@
 //
 
 // Copyright (c) 2004-2007, Lode Vandevenne
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
+//
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -117,14 +117,14 @@ int main()
 
         for(int x = 0; x < w; x++)
 	    {
-			//calculate ray position and direction 
+			//calculate ray position and direction
 			double cameraX = 2 * x / double(w) - 1; //x-coordinate in camera space
 			double rayPosX = posX;
 			double rayPosY = posY;
 			double rayDirX = dirX + planeX * cameraX;
 			double rayDirY = dirY + planeY * cameraX;
 
-			//which box of the map we're in  
+			//which box of the map we're in
 			int mapX = int(rayPosX);
 			int mapY = int(rayPosY);
 
@@ -266,7 +266,7 @@ int main()
 		  if(worldMap[int(posX - dirX * moveSpeed)][int(posY)] == false) posX -= dirX * moveSpeed;
 		  if(worldMap[int(posX)][int(posY - dirY * moveSpeed)] == false) posY -= dirY * moveSpeed;
 		}
-		//rotate to the right   
+		//rotate to the right
 		if (keyDown(SDLK_RIGHT))
 		{
 		  //both camera direction and camera plane must be rotated

@@ -1,7 +1,7 @@
 
 CC=g++
-CFLAGS=-c 
-LFLAGS=-framework SDL2 -framework SDL2_image
+CFLAGS=-c
+LFLAGS=-framework SDL2
 FLAGS= $(CFLAGS) $(LFLAGS)
 SRC=source/
 BUILD=build/
@@ -17,10 +17,9 @@ build: main.o
 link:
 	$(CC) $(OBJECTS) $(LFLAGS) -o rayCaster.out
 
-clean: 
+clean:
 	rm -rf *.o *.out
 
 # compile individual files
 main.o: $(SRC)main.cpp
 	$(CC) $(CFLAGS) $(SRC)main.cpp -o $(BUILD)main.o
-
