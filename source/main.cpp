@@ -35,39 +35,7 @@ using namespace InstantCG;
 #define mapHeight 24
 
 // replacements for quickcg functionality
-/*
-int w = SCREEN_WIDTH;
-int h = SCREEN_HEIGHT;
 
-struct ColorRGB
-{
-	int r;
-	int g;
-	int b;
-};
-
-ColorRGB operator/(const ColorRGB& color, int a)
-{
-  if(a == 0) return color;
-  ColorRGB c;
-  c.r = color.r / a;
-  c.g = color.g / a;
-  c.b = color.b / a;
-  return c;
-}
-
-ColorRGB RGB_Red    = {255,  0,  0};
-ColorRGB RGB_Green  = {  0,255,  0};
-ColorRGB RGB_Blue   = {  0,  0,255};
-ColorRGB RGB_White  = {255,255,255};
-ColorRGB RGB_Yellow = {255,255,  0};
-
-bool done();
-void redraw();
-void cls();
-void verLine(int x, int start, int end, ColorRGB color);
-unsigned long getTicks();
-*/
 void print(float num);
 
 const Uint8* keystate;
