@@ -27,13 +27,15 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
-#include "SDLsetup.h"
+//#include "SDLsetup.h"
+#include "instantcg.h"
+using namespace InstantCG;
 
 #define mapWidth 24
 #define mapHeight 24
 
 // replacements for quickcg functionality
-
+/*
 int w = SCREEN_WIDTH;
 int h = SCREEN_HEIGHT;
 
@@ -63,9 +65,10 @@ ColorRGB RGB_Yellow = {255,255,  0};
 bool done();
 void redraw();
 void cls();
-void print(float num);
 void verLine(int x, int start, int end, ColorRGB color);
 unsigned long getTicks();
+*/
+void print(float num);
 
 const Uint8* keystate;
 void readKeys();
@@ -110,7 +113,7 @@ int main()
 	double time = 0;    //time of current frame
 	double oldTime = 0; //time of previous frame
 
-	initEverything();
+    screen(640, 460);
 
 	while (!done()) // START OF GAME LOOP
 	{
@@ -293,46 +296,11 @@ int main()
 	return 0;
 }
 
-bool done()
-{
-	static SDL_Event event;
-
-	// poll the event queue
-	while (SDL_PollEvent(&event))
-	{
-		if (event.type == SDL_QUIT) { return true; }
-	}
-	return false;
-}
-
 void print(float num)
 {
 	std::cout << num << std::endl;
 }
 
-void redraw()
-{
-	SDL_RenderPresent(ren);
-}
-
-void cls()
-{
-	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
-       SDL_RenderClear(ren);
-}
-
-void verLine(int x, int start, int end, ColorRGB color)
-{
-	// renderer, red, green, blue, alpha
-	SDL_SetRenderDrawColor(ren, color.r, color.g, color.b, 255);
-
-	SDL_RenderDrawLine(ren, x, start, x, end);
-}
-
-unsigned long getTicks()
-{
-	return SDL_GetTicks();
-}
 
 void readKeys()
 {
