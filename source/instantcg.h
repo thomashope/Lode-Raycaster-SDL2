@@ -1,13 +1,11 @@
 /*
 
-InstantCG 20150330
+InstantCG 20150401
 
 InstantCG is a derivative work of QuickCG by Thomas Hope.
 The aim is for InstantCG to be a drop in replacement for QuickCG using SDL2
 and to build on QuickCG to include functionality that is only availible in
 SDL2.
-
-You can find more about InstantCG https://github.com/Cyphre117/InstantCG
 
 The below legal notice is preserved from the original QuickCG
 
@@ -42,10 +40,44 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <iomanip>
 
 namespace InstantCG
 {
-    
+////////////////////////////////////////////////////////////////////////////////
+//useful templates//////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+ //usage: std::string str = valtostr(25353.91654654f);
+ template<typename T>
+ std::string valtostr(const T& val)
+ {
+     std::ostringstream sstream;
+     sstream << val;
+     return sstream.str();
+ }
+
+//usage: double val = stringtoval<double>("456.498.654");
+ template<typename T>
+ T strtoval(const std::string& s)
+ {
+     std::istringstream sstream(s);
+     T val;
+     sstream >> val;
+     return val;
+ }
+
+//length is decimal precision of the floating point number
+template<typename T>
+std::string valtostr(const T& val, int length, bool fixed = true)
+{
+  std::ostringstream sstream;
+  if(fixed) sstream << std::fixed;
+  sstream << std::setprecision(length) << val;
+  return sstream.str();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //COLOR STRUCTS/////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -126,26 +158,35 @@ struct ColorHSV
 //GLOBAL VARIABLES//////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-extern int w;
-extern int h;
+extern int w;               // the width of the window
+extern int h;               // the height of the window
 extern SDL_Window*   win;
 extern SDL_Renderer* ren;
+
+////////////////////////////////////////////////////////////////////////////////
+//KEYBOARD FUNCTIONS////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+bool keyDown(SDL_Keycode key);   // checks if the key is held down, true as long as the key is held
+bool keyDown(SDL_Scancode key);  // checks if the key is held down, true as long as the key is held
+void readKeys();        // gets the current state of the keyboard
 
 ////////////////////////////////////////////////////////////////////////////////
 //BASIC SCREEN FUNCTIONS////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 void screen(int width = 640, int height = 400, bool fullscreen = false, const std::string& text = " ");
-void redraw();
-void cls(const ColorRGB& color = RGB_Black);
+void redraw();                               // updates the visible display
+void cls(const ColorRGB& color = RGB_Black); // clears the screen to the given color
+bool onScreen(int x, int y);                 // True if the given coords are inside the screen
 
 ////////////////////////////////////////////////////////////////////////////////
 //NON GRAPHICAL FUNCTIONS///////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 bool done(bool quit_if_esc = true, bool delay = true);
-void end();
-inline unsigned long getTicks() { return SDL_GetTicks(); } // milliseconds since SDL was initialised
+void end();                                                 // quits the program
+inline unsigned long getTicks() { return SDL_GetTicks(); }  // milliseconds since SDL was initialised
 inline double getTime() { return SDL_GetTicks() / 1000.0; } // seconds since SDL was initialised
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +195,7 @@ inline double getTime() { return SDL_GetTicks() / 1000.0; } // seconds since SDL
 
 void horLine(int y, int x1, int x2, const ColorRGB& color); // draws a horizontal line
 void verLine(int x, int y1, int y2, const ColorRGB& color); // draws a verticle line
-void drawLine(int x1, int y1, int x2, int y2, const ColorRGB& color); // draws a line
+void drawLine(int x1, int y1, int x2, int y2, const ColorRGB& color);   // draws a line
 inline void line(int x1, int y1, int x2, int y2, const ColorRGB& color) // shortcut for drawLine()
 { drawLine(x1, y1, x2, y2, color); }
 

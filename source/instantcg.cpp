@@ -1,13 +1,11 @@
 /*
 
-InstantCG 20150330
+InstantCG 20150401
 
 InstantCG is a derivative work of QuickCG by Thomas Hope.
 The aim is for InstantCG to be a drop in replacement for QuickCG using SDL2
 and to build on QuickCG to include functionality that is only availible in
 SDL2.
-
-You can find more about InstantCG https://github.com/Cyphre117/InstantCG
 
 The below legal notice is preserved from the original QuickCG
 
@@ -49,7 +47,33 @@ int h; //height of the screen
 SDL_Window*   win; //The window
 SDL_Renderer* ren; //The renderer
 
+const Uint8* inkeys;
 SDL_Event event = {0};
+
+////////////////////////////////////////////////////////////////////////////////
+//KEYBOARD FUNCTIONS////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+//Gives value of pressed keys to inkeys
+void readKeys()
+{
+    inkeys = SDL_GetKeyboardState(NULL);
+}
+
+// visit https://wiki.libsdl.org/CategoryKeyboard for description of scancodes vs keycodes
+
+//Converts keycodes to the layout independent scancodes
+bool keyDown(SDL_Keycode key)
+{
+    return (inkeys[SDL_GetScancodeFromKey(key)] != 0);
+}
+
+//Scancodes don't move even if the user has a different keyboard layout
+bool keyDown(SDL_Scancode key)
+{
+    return (inkeys[key] != 0);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //BASIC SCREEN FUNCTIONS////////////////////////////////////////////////////////
@@ -76,10 +100,16 @@ void redraw()
 {
     SDL_RenderPresent(ren);
 }
+
 void cls(const ColorRGB& color)
 {
     SDL_SetRenderDrawColor(ren, color.r, color.g, color.b, 255);
     SDL_RenderClear(ren);
+}
+
+bool onScreen(int x, int y)
+{
+    return (x >= 0 && y >= 0 && x < w && y < h);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -90,12 +120,12 @@ void cls(const ColorRGB& color)
 bool done(bool quit_if_esc, bool delay)
 {
 	if (delay) SDL_Delay(5); //So it consumes less processing power
+    readKeys();
 	while (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_QUIT) return true;
 		if (quit_if_esc &&
-			event.type == SDL_KEYDOWN &&
-			event.key.keysym.sym == SDLK_ESCAPE) return true;
+			keyDown(SDL_SCANCODE_ESCAPE)) return true;
 	}
 	return false;
 }
